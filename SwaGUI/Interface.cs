@@ -35,7 +35,7 @@ namespace SwagGUI
             this.buttonCalibrate.TabIndex = 0;
             this.buttonCalibrate.Text = "Calibrate";
             this.buttonCalibrate.UseVisualStyleBackColor = true;
-            this.buttonCalibrate.Click += new EventHandler(buttonCalibrate_Click);
+            this.buttonCalibrate.Click += new System.EventHandler(this.buttonCalibrate_Click);
             //
             // labelName
             //
@@ -118,9 +118,9 @@ namespace SwagGUI
             this.buttonBroadcast.Name = "buttonBroadcast";
             this.buttonBroadcast.Size = new System.Drawing.Size(201, 23);
             this.buttonBroadcast.TabIndex = 9;
-            this.buttonBroadcast.Text = "Start Reading";
+            this.buttonBroadcast.Text = "Start";
             this.buttonBroadcast.UseVisualStyleBackColor = true;
-            buttonBroadcast.Click += new EventHandler(buttonBroadcast_Click);
+            this.buttonBroadcast.Click += new System.EventHandler(this.buttonBroadcast_Click);
             //
             // Interface
             //
@@ -154,10 +154,12 @@ namespace SwagGUI
         {
             if (TimerHandler.TimerEnabled())
             {
+                buttonBroadcast.Text = "Start";
                 TimerHandler.StopTimer();
             }
             else
             {
+                buttonBroadcast.Text = "Stop";
                 TimerHandler.StartTimer();
             }
         }

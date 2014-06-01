@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using System.Collections.Generic;
-using Tesseract;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Tesseract;
 
 namespace SwagGUI
 {

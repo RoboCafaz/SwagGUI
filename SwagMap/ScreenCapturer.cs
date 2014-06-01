@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace SwagGUI
+namespace SwagMap
 {
     internal class ScreenCapturer
     {
@@ -24,18 +24,8 @@ namespace SwagGUI
         public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
 
         private static RECT nullRect = new Rectangle(0, 0, 0, 0);
-
-        public static Bitmap CaptureScreen()
-        {
-            return CaptureScreen(true, nullRect);
-        }
-
-        public static Bitmap CaptureHealthArea()
-        {
-            return CaptureScreen(false, Options.healthBox);
-        }
-
-        public static Bitmap CaptureScreen(bool force, RECT area)
+        
+        public static Bitmap CaptureScreen(bool force, bool fullscreen)
         {
             Process[] processes = Process.GetProcessesByName("gw2");
             if (processes.Length > 0)
@@ -43,13 +33,13 @@ namespace SwagGUI
                 Process process = processes[0];
                 IntPtr hwnd = process.MainWindowHandle;
                 String name = process.MainWindowTitle;
-                return CaptureScreen(hwnd, force, area);
+                return CaptureScreen(hwnd, force, fullscreen);
             }
             Console.Error.WriteLine("Could not find hwnd of Guild Wars 2.");
             return null;
         }
 
-        private static Bitmap CaptureScreen(IntPtr hwnd, bool force, RECT area)
+        private static Bitmap CaptureScreen(IntPtr hwnd, bool force, bool fullscreen)
         {
             if (force)
             {
@@ -70,12 +60,20 @@ namespace SwagGUI
 
             if (success)
             {
-                if (area.Width > 0 && area.Height > 0)
+                int height = rect.Width;
+                int width = rect.Height;
+                if (!fullscreen)
                 {
-                    rect = new Rectangle(rect.Left + area.Left, rect.Top + area.Top, area.Width, area.Height);
+                    height = Options.Height;
+                    width = Options.Width;
+                    int left = rect.Right - Options.Width;
+                    int top = 0;
+                    if (Options.Bottom)
+                    {
+                        top += (rect.Bottom - Options.Height);
+                    }
+                    rect = new Rectangle(rect.Right - Options.Width, rect.Bottom - Options.Height, Options.Width, Options.Height);
                 }
-                int width = rect.Width;
-                int height = rect.Height;
 
                 Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
                 Graphics.FromImage(bmp).CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);

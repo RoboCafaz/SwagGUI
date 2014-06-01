@@ -41,7 +41,7 @@ namespace SwagGUI
             Bitmap bitmap = ScreenCapturer.CaptureHealthArea();
             if (bitmap != null)
             {
-                NumberParser.ParseNumber(bitmap);
+                int hp = NumberParser.ParseNumber(bitmap);
             }
             Console.WriteLine("Took " + (Environment.TickCount - tick) + "ms.");
         }
